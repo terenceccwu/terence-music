@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import SongList from '../components/SongList'
+
+import SongModel from '../model/SongModel'
 
 export default class MusicLibraryContainer extends Component {
   state = {
@@ -17,8 +18,7 @@ export default class MusicLibraryContainer extends Component {
     )
   }
   getSongs() {
-    axios.get('/songs.json')
-      .then(response => response.data.slice(0,10))
+    SongModel.getSongs()
       .then(tracks => {
         this.setState({tracks})
       })
