@@ -11,6 +11,7 @@ import { Navbar } from 'react-materialize'
 import './style.css'
 
 import MusicLibraryContainer from './containers/MusicLibraryContainer'
+import AddSongContainer from './containers/AddSongContainer'
 
 class App extends Component {
   render () {
@@ -19,11 +20,13 @@ class App extends Component {
         <div>
           <Navbar brand='Music App' right>
             <ListItemLink exact to="/">Library</ListItemLink>
+            <ListItemLink exact to="/add_song">Add Song</ListItemLink>
             <ListItemLink to="/about">About</ListItemLink>
           </Navbar>
 
           <div className="container">
             <Route exact path='/' component={MusicLibraryContainer} />
+            <Route path='/add_song' component={AddSongContainer} />
             <Route path='/about' component={About} />
           </div>
         </div>
