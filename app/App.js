@@ -18,13 +18,13 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Navbar brand='Music App' right>
+          <Navbar brand='Music App' right className="top-nav" options={{closeOnClick: true}}>
             <ListItemLink exact to="/">Library</ListItemLink>
             <ListItemLink exact to="/add_song">Add Song</ListItemLink>
             <ListItemLink to="/about">About</ListItemLink>
           </Navbar>
 
-          <div className="container">
+          <div className="container main-container">
             <Route exact path='/' component={MusicLibraryContainer} />
             <Route path='/add_song' component={AddSongContainer} />
             <Route path='/about' component={About} />

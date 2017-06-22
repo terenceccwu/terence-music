@@ -1,31 +1,37 @@
 import React, { Component } from 'react'
-import { Table } from 'react-materialize'
+import { Row, Col, Table, Badge } from 'react-materialize'
 import axios from 'axios'
 
 const SongList = (props) => (
-  <Table hoverable>
-    <thead>
-      <tr>
-        <th style={{width:'5%'}}></th>
-        <th style={{width:'30%'}}>Name</th>
-        <th style={{width:'10%'}}>xx:xx</th>
-        <th style={{width:'20%'}}>Artist</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {props.tracks.map(renderRow)}
-    </tbody>
-  </Table>
+  <Row>
+    <Col s={12} m={8} offset="m2">
+      <h3>Library</h3>
+      <Table hoverable>
+        <tbody>
+          {props.tracks.map(renderRow)}
+        </tbody>
+      </Table>
+    </Col>
+  </Row>
 )
 
 function renderRow(track, i) {
   return (
     <tr key={i}>
       <td className="center-align"><img src={track.image} width="50"/></td>
-      <td>{track.name}</td>
-      <td>{msToTime(track.duration_ms)}</td>
-      <td>{track.artist}</td>
+      <td>
+        <div>
+          {track.name} - <small>{track.artist}</small><br />
+        </div>
+        <div>
+          <small><span style={{color:'#1DA1F2'}}>@terence</span> - 10 day</small>
+        </div>
+      </td>
+      <td style={{color:'grey',fontSize:10, textAlign: 'center'}}>
+        <i className="material-icons">{ Math.random() > 0.5 ? 'favorite_border' : 'favorite'}</i>
+        <br />
+        10
+      </td>
     </tr>
   )
 }
