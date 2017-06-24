@@ -1,27 +1,27 @@
 import React, { Component } from 'react'
-import { Row, Col, Table, Badge } from 'react-materialize'
+import { Display1 } from 'react-mdc-web'
 import axios from 'axios'
 
 const SongList = (props) => (
-  <Row>
-    <Col s={12} m={8} offset="m2">
-      <h3>Library</h3>
-      <Table hoverable>
+  <div className="row" style={{margin: 10}}>
+    <div className="col-xs-12 col-md-6 col-md-offset-3">
+      <Display1>Library</Display1>
+      <table style={{width:'100%', fontSize:'80%'}}>
         <tbody>
           {props.tracks.map(renderRow)}
         </tbody>
-      </Table>
-    </Col>
-  </Row>
+      </table>
+    </div>
+  </div>
 )
 
 function renderRow(track, i) {
   return (
-    <tr key={i}>
+    <tr key={i} style={{height:70}}>
       <td className="center-align"><img src={track.image} width="50"/></td>
-      <td>
+      <td style={{padding:10}}>
         <div>
-          {track.name} - <small>{track.artist}</small><br />
+          {track.name} <small style={{color:'grey'}}>- {track.artist}</small>
         </div>
         <div>
           <small><span style={{color:'#1DA1F2'}}>@terence</span> - 10 day</small>
