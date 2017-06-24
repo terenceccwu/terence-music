@@ -8,6 +8,7 @@ module.exports = {
   },
   devServer: {
     inline: true,
+    disableHostCheck: true,
     contentBase: './app',
     port: 8100
   },
