@@ -14,6 +14,7 @@ import './style.css'
 
 import MusicLibraryContainer from './containers/MusicLibraryContainer'
 import AddSongContainer from './containers/AddSongContainer'
+import ExploreContainer from './containers/ExploreContainer'
 
 
 class App extends Component {
@@ -28,8 +29,8 @@ class App extends Component {
                 <ToolbarTitle>Music App</ToolbarTitle>
               </ToolbarSection>
               <ToolbarSection align="end">
-                <Link exact to="/add_song" className="material-icons mdc-toolbar__icon">add</Link>
-                <Link exact to="/" className="material-icons mdc-toolbar__icon">library_music</Link>
+                <Link to="/explore" className="material-icons mdc-toolbar__icon">add</Link>
+                <Link to="/" className="material-icons mdc-toolbar__icon">library_music</Link>
                 <Link to="/about" className="material-icons mdc-toolbar__icon">mail</Link>
               </ToolbarSection>
             </ToolbarRow>
@@ -37,6 +38,7 @@ class App extends Component {
           <div style={{paddingTop: 56}}>
             <Route exact path='/' component={MusicLibraryContainer} />
             <Route path='/add_song' component={AddSongContainer} />
+            <Route path='/explore' component={ExploreContainer} />
             <Route path='/about' component={About} />
           </div>
         </div>

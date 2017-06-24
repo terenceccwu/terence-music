@@ -11,13 +11,15 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.16.2",
+    "bluebird": "^3.5.0",
     "flexboxgrid": "^6.3.1",
     "material-components-web": "^0.13.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-materialize": "^1.0.1",
     "react-mdc-web": "^0.13.0",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.1",
+    "youtube-search": "^1.0.10"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

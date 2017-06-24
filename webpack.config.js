@@ -24,5 +24,10 @@ module.exports = {
         loader: 'style-loader!css-loader'
       }
     ]
+  },
+  resolve: {
+    alias: {
+      "request$": "xhr"
+    }
   }
 }
