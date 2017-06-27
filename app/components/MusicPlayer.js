@@ -8,7 +8,7 @@ class MusicPlayer extends Component {
         // current: 0,
         progress: 0,
         random: false,
-        repeat: false,
+        repeat: true,
         mute: false,
         play: this.props.autoplay || false,
         // songs: this.props.songs || [],
@@ -70,12 +70,14 @@ class MusicPlayer extends Component {
     }
 
     end = () => {
-        (this.state.repeat) ? this.play() : this.setState({ play: false });
+        (this.state.repeat) ? this.next() : this.setState({ play: false });
     }
 
     next = () => {
       this.props.playNext()
       this.setState({ progress: 0 });
+      this.play();
+
         // var total = this.props.songs.length;
         // if(total == 0) return;
         //
