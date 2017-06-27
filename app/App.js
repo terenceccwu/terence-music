@@ -18,28 +18,22 @@ import AddSongContainer from './containers/AddSongContainer'
 import ExploreContainer from './containers/ExploreContainer'
 
 import MusicPlayer from './components/MusicPlayer'
+import SongModel from './model/SongModel'
 
 class App extends Component {
   state = {
-    current: 0,
-    songs: [{
-      url: "https://drive.google.com/uc?id=0B-mMjiNWrFgpX2FVSjF2V0dGOGM",
-      cover: "https://i1.sndcdn.com/artworks-000103636612-9z7z4n-t500x500.jpg",
-      artist: {
-        name: 'artist 2',
-        song: 'song 2'
-      }
-    },{
-      url: "https://drive.google.com/uc?id=0B-mMjiNWrFgpRXU0NEdCMS1EUFU",
-      cover: "https://i.scdn.co/image/763264d7a2db4d99c6bcf6487ffc29e728c2c187",
-      artist: {
-        name: 'Red Velvet',
-        song: '러시안 룰렛 Russian Roulette'
-      }
-    }]
+    current: null,
+    songs: []
   }
   componentDidMount = () => {
-
+    SongModel.getSongs()
+      .then(songs => songs.map(song => ({
+        url: song.preview_url,
+        cover: song.image,
+        artist: song.artist,
+        title: song.name
+      })))
+      .then(songs => this.setState({current: 0, songs}))
   }
   playNext = () => {
     this.setState((prevState, props) => ({current: (prevState.current + 1) % prevState.songs.length}))
