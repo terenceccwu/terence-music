@@ -4,14 +4,14 @@ import shuffle from 'shuffle-array';
 
 class MusicPlayer extends Component {
     state = {
-        active: this.props.songs[0] || null,
-        current: 0,
+        // active: this.props.songs[0] || null,
+        // current: 0,
         progress: 0,
         random: false,
         repeat: false,
         mute: false,
         play: this.props.autoplay || false,
-        songs: this.props.songs || [],
+        // songs: this.props.songs || [],
         collapsed: true
     }
 
@@ -74,33 +74,35 @@ class MusicPlayer extends Component {
     }
 
     next = () => {
-        var total = this.state.songs.length;
-        if(total == 0) return;
-
-        var current = (this.state.repeat) ? this.state.current : (this.state.current < total - 1) ? this.state.current + 1 : 0;
-        var active = this.state.songs[current];
-
-        this.setState({ current: current, active: active, progress: 0 });
-
-        this.refs.player.src = active.url;
-        this.play();
+      this.props.playNext()
+      this.setState({ progress: 0 });
+        // var total = this.props.songs.length;
+        // if(total == 0) return;
+        //
+        // var current = (this.state.repeat) ? this.state.current : (this.state.current < total - 1) ? this.state.current + 1 : 0;
+        // var active = this.props.songs[current];
+        //
+        // this.setState({ current: current, active: active, progress: 0 });
+        //
+        // this.refs.player.src = active.url;
+        // this.play();
     }
 
     previous = () => {
-        var total = this.state.songs.length;
-        var current = (this.state.current > 0) ? this.state.current - 1 : total - 1;
-        var active = this.state.songs[current];
-
-        this.setState({ current: current, active: active, progress: 0 });
-
-        this.refs.player.src = active.url;
-        this.play();
+        // var total = this.props.songs.length;
+        // var current = (this.state.current > 0) ? this.state.current - 1 : total - 1;
+        // var active = this.props.songs[current];
+        //
+        // this.setState({ current: current, active: active, progress: 0 });
+        //
+        // this.refs.player.src = active.url;
+        // this.play();
     }
 
     randomize = () => {
-        var s = shuffle(this.state.songs.slice());
+        var s = shuffle(this.props.songs.slice());
 
-        this.setState({ songs: (!this.state.random) ? s : this.state.songs, random: !this.state.random });
+        this.setState({ songs: (!this.state.random) ? s : this.props.songs, random: !this.state.random });
     }
 
     repeat = () => {
@@ -116,7 +118,11 @@ class MusicPlayer extends Component {
 
     render () {
 
-        const { active, play, progress } = this.state;
+        const { play, progress } = this.state;
+
+        const { current, songs } = this.props;
+
+        const active = songs[current] || null;
 
         let containerClass = classnames('player-container', {'collapsed': this.state.collapsed})
         let playPauseClass = classnames({'pause': play}, {'play_arrow': !play});
@@ -130,7 +136,7 @@ class MusicPlayer extends Component {
                   <i className="material-icons">keyboard_arrow_down</i>
                 </div>
 
-                <audio src={active ? active.url : ''} preload="auto" ref="player"></audio>
+                <audio src={active ? active.url : ''} ref="player" autoPlay></audio>
 
                 <div className="song-info" onClick={() => { if(this.state.collapsed) this.toggleCollapse() }}>
                   <div className="album-cover">

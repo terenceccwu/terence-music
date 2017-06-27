@@ -21,7 +21,15 @@ import MusicPlayer from './components/MusicPlayer'
 
 class App extends Component {
   state = {
+    current: 0,
     songs: [{
+      url: "https://drive.google.com/uc?id=0B-mMjiNWrFgpX2FVSjF2V0dGOGM",
+      cover: "https://i1.sndcdn.com/artworks-000103636612-9z7z4n-t500x500.jpg",
+      artist: {
+        name: 'artist 2',
+        song: 'song 2'
+      }
+    },{
       url: "https://drive.google.com/uc?id=0B-mMjiNWrFgpRXU0NEdCMS1EUFU",
       cover: "https://i.scdn.co/image/763264d7a2db4d99c6bcf6487ffc29e728c2c187",
       artist: {
@@ -32,6 +40,9 @@ class App extends Component {
   }
   componentDidMount = () => {
 
+  }
+  playNext = () => {
+    this.setState((prevState, props) => ({current: (prevState.current + 1) % prevState.songs.length}))
   }
   render () {
     return (
@@ -56,7 +67,7 @@ class App extends Component {
             <Route path='/explore' component={ExploreContainer} />
             <Route path='/about' component={About} />
           </div>
-          <MusicPlayer songs={this.state.songs}/>
+          <MusicPlayer autoplay={true} songs={this.state.songs} current={this.state.current} playNext={this.playNext} />
         </div>
       </Router>
     )
