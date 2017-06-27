@@ -91,6 +91,9 @@ class MusicPlayer extends Component {
     }
 
     previous = () => {
+      this.props.playPrevious()
+      this.setState({ progress: 0 });
+      this.play();
         // var total = this.props.songs.length;
         // var current = (this.state.current > 0) ? this.state.current - 1 : total - 1;
         // var active = this.props.songs[current];

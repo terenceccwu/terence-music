@@ -44,6 +44,9 @@ class App extends Component {
   playNext = () => {
     this.setState((prevState, props) => ({current: (prevState.current + 1) % prevState.songs.length}))
   }
+  playPrevious = () => {
+    this.setState((prevState, props) => ({current: (prevState.current - 1 + prevState.songs.length) % prevState.songs.length}))
+  }
   render () {
     return (
       <Router>
@@ -67,7 +70,7 @@ class App extends Component {
             <Route path='/explore' component={ExploreContainer} />
             <Route path='/about' component={About} />
           </div>
-          <MusicPlayer autoplay={true} songs={this.state.songs} current={this.state.current} playNext={this.playNext} />
+          <MusicPlayer autoplay={true} songs={this.state.songs} current={this.state.current} playPrevious={this.playPrevious} playNext={this.playNext} />
         </div>
       </Router>
     )
