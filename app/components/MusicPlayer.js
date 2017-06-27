@@ -148,8 +148,8 @@ class MusicPlayer extends Component {
                     <img src={active ? active.cover : ''} />
                   </div>
                   <div className="artist-info">
-                    <h3 className="artist-song-name">{active ? active.artist.song : ''}</h3>
-                    <h2 className="artist-name">{active ? active.artist.name : ''}</h2>
+                    <h3 className="artist-song-name">{active ? active.title : ''}</h3>
+                    <h2 className="artist-name">{active ? active.artist : ''}</h2>
                   </div>
                 </div>
 
