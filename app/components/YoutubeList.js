@@ -4,31 +4,29 @@ import axios from 'axios'
 const YoutubeList = (props) => (
   <table style={{width:'100%', fontSize:'80%'}}>
     <tbody>
-      {props.tracks.map(renderRow)}
+      {props.tracks.map((track, i) => <YoutubeRow track={track} key={i} index={i} addYoutubeSong={props.addYoutubeSong}/>)}
     </tbody>
   </table>
 )
 
-function renderRow(track, i) {
-  return (
-    <tr key={i} style={{height:70}}>
-      <td className="center-align"><img src={track.thumbnails.default.url} width="100%"/></td>
-      <td style={{padding:10}}>
-        <div>
-          {track.title}
-        </div>
-        <div>
-          <small><span style={{color:'#1DA1F2'}}>{track.channelTitle}</span> - {track.publishedAt.substr(0,10)}</small>
-        </div>
-      </td>
-      <td style={{color:'grey',fontSize:10, textAlign: 'center'}}>
-        <i className="material-icons">{ Math.random() > 0.5 ? 'favorite_border' : 'favorite'}</i>
-        <br />
-        10
-      </td>
-    </tr>
-  )
-}
+const YoutubeRow = ({ track, index, addYoutubeSong }) => (
+  <tr style={{height:70}}>
+    <td className="center-align" onClick={() => addYoutubeSong(index)}><img src={track.thumbnails.default.url} width="100%"/></td>
+    <td style={{padding:10}}>
+      <div>
+        {track.title}
+      </div>
+      <div>
+        <small><span style={{color:'#1DA1F2'}}>{track.channelTitle}</span> - {track.publishedAt.substr(0,10)}</small>
+      </div>
+    </td>
+    <td style={{color:'grey',fontSize:10, textAlign: 'center'}}>
+      <i className="material-icons">{ Math.random() > 0.5 ? 'favorite_border' : 'favorite'}</i>
+      <br />
+      10
+    </td>
+  </tr>
+)
 
 function msToTime(s) {
   // Pad to 2 or 3 digits, default is 2

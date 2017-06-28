@@ -26,20 +26,16 @@ class App extends Component {
     songs: []
   }
   componentDidMount = () => {
-    SongModel.getSongs()
-      .then(songs => songs.map(song => ({
-        url: song.preview_url,
-        cover: song.image,
-        artist: song.artist,
-        title: song.name
-      })))
-      .then(songs => this.setState({current: 0, songs}))
+
   }
   playNext = () => {
     this.setState((prevState, props) => ({current: (prevState.current + 1) % prevState.songs.length}))
   }
   playPrevious = () => {
     this.setState((prevState, props) => ({current: (prevState.current - 1 + prevState.songs.length) % prevState.songs.length}))
+  }
+  addSong = (song) => {
+    this.setState({current: (this.state.current || 0), songs: [...this.state.songs, song]})
   }
   render () {
     return (
@@ -61,7 +57,7 @@ class App extends Component {
           <div style={{paddingTop: 56, paddingBottom: 84}}>
             <Route exact path='/' component={MusicLibraryContainer} />
             <Route path='/add_song' component={AddSongContainer} />
-            <Route path='/explore' component={ExploreContainer} />
+            <Route path='/explore' render={(props) => <ExploreContainer addSong={this.addSong} {...props} />} />
             <Route path='/about' component={About} />
           </div>
           <MusicPlayer autoplay={true} songs={this.state.songs} current={this.state.current} playPrevious={this.playPrevious} playNext={this.playNext} />
