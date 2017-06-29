@@ -8,33 +8,33 @@ const SongList = (props) => (
       <Display1>Library</Display1>
       <table style={{width:'100%', fontSize:'80%'}}>
         <tbody>
-          {props.tracks.map(renderRow)}
+          {props.tracks.map((track,i) => <SongRow track={track} index={i} playSong={props.playSong} key={i} />)}
         </tbody>
       </table>
     </div>
   </div>
 )
 
-function renderRow(track, i) {
-  return (
-    <tr key={i} style={{height:70}}>
-      <td className="center-align"><img src={track.image} width="50"/></td>
-      <td style={{padding:10}}>
-        <div>
-          {track.name} <small style={{color:'grey'}}>- {track.artist}</small>
-        </div>
-        <div>
-          <small><span style={{color:'#1DA1F2'}}>@terence</span> - 10 day</small>
-        </div>
-      </td>
-      <td style={{color:'grey',fontSize:10, textAlign: 'center'}}>
-        <i className="material-icons">{ Math.random() > 0.5 ? 'favorite_border' : 'favorite'}</i>
-        <br />
-        10
-      </td>
-    </tr>
-  )
-}
+const SongRow = ({ track, index, playSong }) => (
+  <tr key={index} style={{height:70}}>
+    <td onClick={() => playSong(index)} className="center-align" style={{cursor:'pointer'}}>
+      <img src={track.cover} width="50"/>
+    </td>
+    <td style={{padding:10}}>
+      <div>
+        {track.title} <small style={{color:'grey'}}>- {track.artist}</small>
+      </div>
+      <div>
+        <small><span style={{color:'#1DA1F2'}}>@terence</span> - 10 day</small>
+      </div>
+    </td>
+    <td style={{color:'grey',fontSize:10, textAlign: 'center'}}>
+      <i className="material-icons">{ Math.random() > 0.5 ? 'favorite_border' : 'favorite'}</i>
+      <br />
+      10
+    </td>
+  </tr>
+)
 
 function msToTime(s) {
   // Pad to 2 or 3 digits, default is 2

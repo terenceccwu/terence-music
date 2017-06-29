@@ -29,7 +29,7 @@ export default class ExploreContainer extends Component {
   addYoutubeSong = (index) => {
     const newSong = this.state.tracks[index]
     this.props.addSong({
-      url: `https://us-central1-terence-music.cloudfunctions.net/redirect?v=${newSong.id}`,
+      url: `http://54.67.113.230:3000?v=${newSong.id}`,
       cover: newSong.thumbnails.default.url,
       artist: newSong.channelTitle,
       title: newSong.title

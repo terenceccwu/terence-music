@@ -26,7 +26,17 @@ class App extends Component {
     songs: []
   }
   componentDidMount = () => {
-
+    SongModel.getFbSongs()
+      .then(songs => {
+        return songs.map(song => ({
+          ...song,
+          url: "http://54.67.113.230:3000?v="+song.id
+        }))
+      })
+      .then(songs => {this.setState({songs})})
+  }
+  playSong = (index) => {
+    this.setState({current: index})
   }
   playNext = () => {
     this.setState((prevState, props) => ({current: (prevState.current + 1) % prevState.songs.length}))
@@ -55,12 +65,12 @@ class App extends Component {
             </ToolbarRow>
           </Toolbar>
           <div style={{paddingTop: 56, paddingBottom: 84}}>
-            <Route exact path='/' component={MusicLibraryContainer} />
+            <Route exact path='/' render={(props) => <MusicLibraryContainer tracks={this.state.songs} playSong={this.playSong} {...props} />} />
             <Route path='/add_song' component={AddSongContainer} />
             <Route path='/explore' render={(props) => <ExploreContainer addSong={this.addSong} {...props} />} />
             <Route path='/about' component={About} />
           </div>
-          <MusicPlayer autoplay={true} songs={this.state.songs} current={this.state.current} playPrevious={this.playPrevious} playNext={this.playNext} />
+          <MusicPlayer autoplay={false} songs={this.state.songs} current={this.state.current} playPrevious={this.playPrevious} playNext={this.playNext} />
         </div>
       </Router>
     )

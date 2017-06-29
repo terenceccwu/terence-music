@@ -13,7 +13,7 @@ export default class MusicLibraryContainer extends Component {
   render() {
     return (
       <div>
-        <SongList tracks={this.state.tracks}/>
+        <SongList tracks={this.props.tracks} playSong={this.props.playSong}/>
       </div>
     )
   }

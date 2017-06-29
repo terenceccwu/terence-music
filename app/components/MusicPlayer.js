@@ -21,6 +21,8 @@ class MusicPlayer extends Component {
 
     componentDidMount = () => {
         let playerElement = this.refs.player;
+        playerElement.addEventListener('loadstart', this.pause);
+        playerElement.addEventListener('loadeddata', this.play);
         playerElement.addEventListener('timeupdate', this.updateProgress);
         playerElement.addEventListener('ended', this.end);
         playerElement.addEventListener('error', this.next);
@@ -28,6 +30,8 @@ class MusicPlayer extends Component {
 
     componentWillUnmount = () => {
         let playerElement = this.refs.player;
+        playerElement.removeEventListener('loadstart', this.pause);
+        playerElement.removeEventListener('loadeddata', this.play);
         playerElement.removeEventListener('timeupdate', this.updateProgress);
         playerElement.removeEventListener('ended', this.end);
         playerElement.removeEventListener('error', this.next);
@@ -141,7 +145,7 @@ class MusicPlayer extends Component {
                   <i className="material-icons">keyboard_arrow_down</i>
                 </div>
 
-                <audio src={active ? active.url : ''} ref="player" autoPlay></audio>
+                <audio src={active ? active.url : null} ref="player"></audio>
 
                 <div className="song-info" onClick={() => { if(this.state.collapsed) this.toggleCollapse() }}>
                   <div className="album-cover">
