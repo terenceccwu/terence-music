@@ -29,7 +29,8 @@ export default class ExploreContainer extends Component {
   addYoutubeSong = (index) => {
     const newSong = this.state.tracks[index]
     this.props.addSong({
-      url: `http://54.67.113.230:3000?v=${newSong.id}`,
+      id: newSong.id,
+      url: `http://192.168.1.136:3000?v=${newSong.id}`,
       cover: newSong.thumbnails.default.url,
       artist: newSong.channelTitle,
       title: newSong.title

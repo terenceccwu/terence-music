@@ -11,7 +11,7 @@ const YoutubeList = (props) => (
 
 const YoutubeRow = ({ track, index, addYoutubeSong }) => (
   <tr style={{height:70}}>
-    <td className="center-align" onClick={() => addYoutubeSong(index)}><img src={track.thumbnails.default.url} width="100%"/></td>
+    <td className="center-align"><img src={track.thumbnails.default.url} width="100%"/></td>
     <td style={{padding:10}}>
       <div>
         {track.title}
@@ -20,10 +20,8 @@ const YoutubeRow = ({ track, index, addYoutubeSong }) => (
         <small><span style={{color:'#1DA1F2'}}>{track.channelTitle}</span> - {track.publishedAt.substr(0,10)}</small>
       </div>
     </td>
-    <td style={{color:'grey',fontSize:10, textAlign: 'center'}}>
-      <i className="material-icons">{ Math.random() > 0.5 ? 'favorite_border' : 'favorite'}</i>
-      <br />
-      10
+    <td style={{color:'grey',fontSize:10, textAlign: 'center', cursor: 'pointer'}} onClick={() => addYoutubeSong(index)}>
+      <i className="material-icons">add</i>
     </td>
   </tr>
 )

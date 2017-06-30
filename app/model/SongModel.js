@@ -16,13 +16,59 @@ export function getSongs() {
     .then(response => response.data.slice(0,10))
 }
 
-export function getFbSongs() {
-  return database.ref('/playlist/default').orderByChild('order')
-    .once('value')
-    .then(snapshot => snapshot.val())
+export function getFbSongs(cb) {
+  database.ref('/playlist/default').orderByKey()
+    .on('value', cb)
+    // .then(snapshot => snapshot.val())
+}
+
+export function getConfig(cb) {
+  database.ref('/config')
+    .on('value', cb)
+    // .then(snapshot => snapshot.val())
+}
+
+export function addFbSongs(song) {
+  let newSong = database.ref('/playlist/default').push()
+  newSong.set(song)
+}
+
+export function prefetch_file(url, progress_callback) {
+  return new Promise((resolve, reject) => {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
+
+    xhr.addEventListener("load", function () {
+      if (xhr.status === 200) {
+        var URL = window.URL || window.webkitURL;
+        var blob_url = URL.createObjectURL(xhr.response);
+        resolve(blob_url);
+      } else {
+        reject();
+      }
+    }, false);
+
+    var prev_pc = 0;
+    xhr.addEventListener("progress", function(event) {
+      if (event.lengthComputable) {
+        var pc = Math.round((event.loaded / event.total) * 100);
+        if (pc != prev_pc) {
+          prev_pc = pc;
+          if(progress_callback) progress_callback(pc);
+        }
+      }
+    });
+
+    xhr.send();
+  })
 }
 
 export default {
   getSongs,
-  getFbSongs
+  getFbSongs,
+  prefetch_file,
+  addFbSongs,
+  getConfig
 }

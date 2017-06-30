@@ -129,9 +129,7 @@ class MusicPlayer extends Component {
 
         const { play, progress } = this.state;
 
-        const { current, songs } = this.props;
-
-        const active = songs[current] || null;
+        const { active } = this.props;
 
         let containerClass = classnames('player-container', {'collapsed': this.state.collapsed})
         let playPauseClass = classnames({'pause': play}, {'play_arrow': !play});
@@ -192,7 +190,7 @@ class MusicPlayer extends Component {
 
 MusicPlayer.propTypes = {
     autoplay: PropTypes.bool,
-    songs: PropTypes.array.isRequired
+    // songs: PropTypes.array.isRequired
 };
 
 export default MusicPlayer;

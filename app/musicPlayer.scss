@@ -84,6 +84,7 @@
     text-align: left;
     top: 25px;
     left: 5%;
+    max-width: 30%;
 
     display: flex;
     align-items: center;
@@ -158,6 +159,8 @@
 .player-options {
     display: flex;
     justify-content: center;
+    position: relative;
+    z-index: 2;
 }
 
 .player-buttons {
