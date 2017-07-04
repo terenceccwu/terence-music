@@ -27,28 +27,31 @@ class App extends Component {
   }
   componentDidMount = () => {
 
-    SongModel.getFbSongs(snapshot => {
-      var songs = Object.values(snapshot.val())
-        .map(song => ({
-          ...song,
-          url: "http://192.168.1.136:3000?v="+song.id
-        }))
+    SongModel.getFbSongs(songs => {
+      var songs = Object.values(songs)
       this.setState({songs})
     })
   }
   playSong = (index) => {
-    this.setState({active: this.state.songs[index]})
+    let song = this.state.songs[index]
+    SongModel.getYTSongs(song.id)
+      .then(info => {
+        song.url = info.url
+        this.setState({active: song})
+      })
   }
-  indexOf = (songs, id) => {
-    return Array.prototype.findIndex.call(songs, song => song.id == id )
+  findIndex = (id) => {
+    return Array.prototype.findIndex.call(this.state.songs, song => song.id == id )
   }
   playNext = () => {
     let { active, songs } = this.state
-    this.setState({active: songs[(this.indexOf(songs,active.id) + 1) % songs.length] })
+    const nextIndex = (this.findIndex(active.id) + 1) % songs.length
+    this.playSong(nextIndex)
   }
   playPrevious = () => {
     let { active, songs } = this.state
-    this.setState({active: songs[(this.indexOf(songs,active.id) - 1 + songs.length) % songs.length] })
+    const prevIndex = (this.findIndex(active.id) - 1 + songs.length) % songs.length
+    this.playSong(prevIndex)
   }
   addSong = (song) => {
     // this.setState({songs: [...this.state.songs, song]})

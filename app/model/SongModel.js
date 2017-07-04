@@ -1,5 +1,6 @@
 import axios from 'axios'
 import firebase from 'firebase'
+import ytdl from 'ytdl-core'
 
 var config = {
   apiKey: "AIzaSyBzcUCCLfBskFJNpULOCMWsfvLgl7c54LM",
@@ -9,7 +10,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-var database = firebase.database();
+// var database = firebase.database();
 
 export function getSongs() {
   return axios.get('/songs.json')
@@ -17,9 +18,20 @@ export function getSongs() {
 }
 
 export function getFbSongs(cb) {
-  database.ref('/playlist/default').orderByKey()
-    .on('value', cb)
-    // .then(snapshot => snapshot.val())
+    axios.get('/default.json')
+      .then(response => cb(response.data))
+  // database.ref('/playlist/default').limitToFirst(30).orderByKey()
+  //   .on('value', cb)
+}
+
+export function getYTSongs(vid) {
+  // return new Promise((res,rej) => {
+  //   res({url: `http://localhost:8000/test.mp3`})
+  // })
+  const url = `https://www.youtube.com/watch?v=${vid}`
+  const opts = {filter: 'audioonly'}
+  return ytdl.getInfo(url)
+    .then(info => ytdl.chooseFormat(info.formats,opts))
 }
 
 export function getConfig(cb) {
@@ -40,7 +52,7 @@ export function prefetch_file(url, progress_callback) {
     xhr.open("GET", url, true);
     xhr.responseType = "blob";
 
-    xhr.addEventListener("load", function () {
+    xhr.addEventListener("loadstart", function () {
       if (xhr.status === 200) {
         var URL = window.URL || window.webkitURL;
         var blob_url = URL.createObjectURL(xhr.response);
@@ -70,5 +82,6 @@ export default {
   getFbSongs,
   prefetch_file,
   addFbSongs,
-  getConfig
+  getConfig,
+  getYTSongs
 }

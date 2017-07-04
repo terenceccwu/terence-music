@@ -10,31 +10,52 @@ class MusicPlayer extends Component {
         random: false,
         repeat: true,
         mute: false,
-        play: this.props.autoplay || false,
+        play: null, // true, false, null
         // songs: this.props.songs || [],
         collapsed: true
     }
+
+    audio = null
 
     toggleCollapse = () => {
       this.setState({collapsed: !this.state.collapsed})
     }
 
+    componentWillReceiveProps = (nextProps) => {
+      if(this.props.active && nextProps.active) {
+        this.stop()
+        this.unbindListeners(this.audio)
+        this.audio.src = ''
+        this.audio.load()
+        this.audio.remove()
+        this.audio = null
+      }
+      if(nextProps.active) {
+        this.audio = new Audio(nextProps.active.url)
+        this.bindListeners(this.audio)
+      }
+    }
+
+    bindListeners = (audio) => {
+      audio.addEventListener('loadstart', this.pause);
+      audio.addEventListener('loadeddata', this.play);
+      audio.addEventListener('timeupdate', this.updateProgress);
+      audio.addEventListener('ended', this.end);
+      audio.addEventListener('error', this.next);
+    }
+
+    unbindListeners = (audio) => {
+      audio.removeEventListener('loadstart', this.pause);
+      audio.removeEventListener('loadeddata', this.play);
+      audio.removeEventListener('timeupdate', this.updateProgress);
+      audio.removeEventListener('ended', this.end);
+      audio.removeEventListener('error', this.next);
+    }
+
     componentDidMount = () => {
-        let playerElement = this.refs.player;
-        playerElement.addEventListener('loadstart', this.pause);
-        playerElement.addEventListener('loadeddata', this.play);
-        playerElement.addEventListener('timeupdate', this.updateProgress);
-        playerElement.addEventListener('ended', this.end);
-        playerElement.addEventListener('error', this.next);
     }
 
     componentWillUnmount = () => {
-        let playerElement = this.refs.player;
-        playerElement.removeEventListener('loadstart', this.pause);
-        playerElement.removeEventListener('loadeddata', this.play);
-        playerElement.removeEventListener('timeupdate', this.updateProgress);
-        playerElement.removeEventListener('ended', this.end);
-        playerElement.removeEventListener('error', this.next);
     }
 
     setProgress = (e) => {
@@ -42,31 +63,35 @@ class MusicPlayer extends Component {
         let width = target.clientWidth;
         let rect = target.getBoundingClientRect();
         let offsetX = e.clientX - rect.left;
-        let duration = this.refs.player.duration;
+        let duration = this.audio.duration;
         let currentTime = (duration * offsetX) / width;
         let progress = (currentTime * 100) / duration;
 
-        this.refs.player.currentTime = currentTime;
+        this.audio.currentTime = currentTime;
         this.setState({ progress: progress });
         this.play();
     }
 
     updateProgress = () => {
-        let duration = this.refs.player.duration;
-        let currentTime = this.refs.player.currentTime;
+        let duration = this.audio.duration;
+        let currentTime = this.audio.currentTime;
         let progress = (currentTime * 100) / duration;
-
         this.setState({ progress: progress });
     }
 
     play = () => {
         this.setState({ play: true });
-        this.refs.player.play();
+        this.audio.play();
     }
 
     pause = () => {
         this.setState({ play: false });
-        this.refs.player.pause();
+        this.audio.pause();
+    }
+
+    stop = () => {
+      this.setState({ play: null });
+      this.audio.pause();
     }
 
     toggle = () => {
@@ -78,9 +103,8 @@ class MusicPlayer extends Component {
     }
 
     next = () => {
+      this.stop()
       this.props.playNext()
-      this.setState({ progress: 0 });
-      this.play();
 
         // var total = this.props.songs.length;
         // if(total == 0) return;
@@ -90,7 +114,7 @@ class MusicPlayer extends Component {
         //
         // this.setState({ current: current, active: active, progress: 0 });
         //
-        // this.refs.player.src = active.url;
+        // this.audio.src = active.url;
         // this.play();
     }
 
@@ -104,7 +128,7 @@ class MusicPlayer extends Component {
         //
         // this.setState({ current: current, active: active, progress: 0 });
         //
-        // this.refs.player.src = active.url;
+        // this.audio.src = active.url;
         // this.play();
     }
 
@@ -122,7 +146,7 @@ class MusicPlayer extends Component {
         let mute = this.state.mute;
 
         this.setState({ mute: !this.state.mute });
-        this.refs.player.volume = (mute) ? 1 : 0;
+        this.audio.volume = (mute) ? 1 : 0;
     }
 
     render () {
@@ -137,13 +161,15 @@ class MusicPlayer extends Component {
         let repeatClass = classnames('player-btn small repeat', {'active': this.state.repeat});
         let randomClass = classnames('player-btn small random', {'active': this.state.random });
 
+        // <audio src={active ? active.url : null} ref="player"></audio>
+
         return (
             <div className={containerClass}>
                 <div className="collapse-btn" onClick={this.toggleCollapse}>
                   <i className="material-icons">keyboard_arrow_down</i>
                 </div>
 
-                <audio src={active ? active.url : null} ref="player"></audio>
+
 
                 <div className="song-info" onClick={() => { if(this.state.collapsed) this.toggleCollapse() }}>
                   <div className="album-cover">
@@ -156,7 +182,7 @@ class MusicPlayer extends Component {
                 </div>
 
                 <div className="player-progress-container" onClick={this.setProgress}>
-                    <span className="player-progress-value" style={{width: progress + '%'}}></span>
+                    <span className="player-progress-value" style={{width: play === null ? 0 : progress + '%'}}></span>
                 </div>
 
 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --host 0.0.0.0",
+    "start": "webpack-dev-server",
     "build": "webpack"
   },
   "keywords": [],
@@ -23,7 +23,8 @@
     "react-mdc-web": "^0.13.0",
     "react-router-dom": "^4.1.1",
     "shuffle-array": "^1.0.1",
-    "youtube-search": "^1.0.10"
+    "youtube-search": "^1.0.10",
+    "ytdl-core": "^0.14.4"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
