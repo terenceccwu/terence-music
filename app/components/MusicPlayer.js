@@ -22,7 +22,11 @@ class MusicPlayer extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-      if(this.props.active && nextProps.active) {
+      const nextActive = nextProps.active || {}
+      const currentActive = this.props.active || {}
+
+      if(currentActive.id && currentActive.id != nextActive.id) {
+        console.log('unbind');
         this.stop()
         this.unbindListeners(this.audio)
         this.audio.src = ''
@@ -30,7 +34,8 @@ class MusicPlayer extends Component {
         this.audio.remove()
         this.audio = null
       }
-      if(nextProps.active) {
+      if(nextActive.id && currentActive.id != nextActive.id) {
+        console.log('bind');
         this.audio = new Audio(nextProps.active.url)
         this.bindListeners(this.audio)
       }
@@ -69,7 +74,6 @@ class MusicPlayer extends Component {
 
         this.audio.currentTime = currentTime;
         this.setState({ progress: progress });
-        this.play();
     }
 
     updateProgress = () => {
@@ -90,7 +94,7 @@ class MusicPlayer extends Component {
     }
 
     stop = () => {
-      this.setState({ play: null });
+      this.setState({ play: null, progress: 0 });
       this.audio.pause();
     }
 
