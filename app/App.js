@@ -22,6 +22,7 @@ import SongModel from './model/SongModel'
 
 class App extends Component {
   state = {
+    play: null,
     active: null,
     songs: []
   }
@@ -32,25 +33,33 @@ class App extends Component {
       this.setState({songs})
     })
   }
+  setPlayState = (state) => {
+    this.setState({play: state})
+  }
   playSong = (index) => {
     let song = this.state.songs[index]
+    // set song info first
+    this.setState({active: song})
     SongModel.getYTSongs(song.id)
       .then(info => {
-        song.url = info.url
+        // Append the url when it is available
+        // This need to be a new object, otherwise, MusicPlayer cannot detect
+        // the changes in componentWillReceiveProps
+        song = Object.assign({}, song, {url: info.url})
         this.setState({active: song})
       })
   }
   findIndex = (id) => {
-    return Array.prototype.findIndex.call(this.state.songs, song => song.id == id )
+    return Array.prototype.findIndex.call(this.state.songs, song => song.id == id ) || 0
   }
   playNext = () => {
     let { active, songs } = this.state
-    const nextIndex = (this.findIndex(active.id) + 1) % songs.length
+    const nextIndex = active ? (this.findIndex(active.id) + 1) % songs.length : 0
     this.playSong(nextIndex)
   }
   playPrevious = () => {
     let { active, songs } = this.state
-    const prevIndex = (this.findIndex(active.id) - 1 + songs.length) % songs.length
+    const prevIndex = active ? (this.findIndex(active.id) - 1 + songs.length) % songs.length : 0
     this.playSong(prevIndex)
   }
   addSong = (song) => {
@@ -80,7 +89,7 @@ class App extends Component {
             <Route path='/explore' render={(props) => <ExploreContainer addSong={this.addSong} {...props} />} />
             <Route path='/about' component={About} />
           </div>
-          <MusicPlayer autoplay={false} active={this.state.active} playPrevious={this.playPrevious} playNext={this.playNext} />
+          <MusicPlayer play={this.state.play} setPlayState={this.setPlayState} active={this.state.active} playPrevious={this.playPrevious} playNext={this.playNext} />
         </div>
       </Router>
     )

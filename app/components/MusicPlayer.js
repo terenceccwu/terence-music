@@ -10,7 +10,7 @@ class MusicPlayer extends Component {
         random: false,
         repeat: true,
         mute: false,
-        play: null, // true, false, null
+        // play: null, // true, false, null
         // songs: this.props.songs || [],
         collapsed: true
     }
@@ -25,7 +25,7 @@ class MusicPlayer extends Component {
       const nextActive = nextProps.active || {}
       const currentActive = this.props.active || {}
 
-      if(currentActive.id && currentActive.id != nextActive.id) {
+      if(currentActive.url && currentActive.url != nextActive.url) {
         console.log('unbind');
         this.stop()
         this.unbindListeners(this.audio)
@@ -34,7 +34,7 @@ class MusicPlayer extends Component {
         this.audio.remove()
         this.audio = null
       }
-      if(nextActive.id && currentActive.id != nextActive.id) {
+      if(nextActive.url && currentActive.url != nextActive.url) {
         console.log('bind');
         this.audio = new Audio(nextProps.active.url)
         this.bindListeners(this.audio)
@@ -84,26 +84,31 @@ class MusicPlayer extends Component {
     }
 
     play = () => {
-        this.setState({ play: true });
+      if(this.props.play === null) { // stopped, initial
+        this.props.playNext();
+      } else { // paused
         this.audio.play();
+      }
+      this.props.setPlayState(true);
     }
 
     pause = () => {
-        this.setState({ play: false });
+        this.props.setPlayState(false);
         this.audio.pause();
     }
 
     stop = () => {
-      this.setState({ play: null, progress: 0 });
+      this.props.setPlayState(null);
+      this.setState({progress: 0});
       this.audio.pause();
     }
 
     toggle = () => {
-        this.state.play ? this.pause() : this.play();
+        this.props.play ? this.pause() : this.play();
     }
 
     end = () => {
-        (this.state.repeat) ? this.next() : this.setState({ play: false });
+        (this.state.repeat) ? this.next() : this.stop();
     }
 
     next = () => {
@@ -123,9 +128,12 @@ class MusicPlayer extends Component {
     }
 
     previous = () => {
-      this.props.playPrevious()
-      this.setState({ progress: 0 });
-      this.play();
+      if(this.audio.currentTime < 2.0) {
+        this.stop()
+        this.props.playPrevious()
+      } else {
+        this.audio.currentTime = 0
+      }
         // var total = this.props.songs.length;
         // var current = (this.state.current > 0) ? this.state.current - 1 : total - 1;
         // var active = this.props.songs[current];
@@ -155,9 +163,9 @@ class MusicPlayer extends Component {
 
     render () {
 
-        const { play, progress } = this.state;
+        const { progress } = this.state;
 
-        const { active } = this.props;
+        const { active, play } = this.props;
 
         let containerClass = classnames('player-container', {'collapsed': this.state.collapsed})
         let playPauseClass = classnames({'pause': play}, {'play_arrow': !play});
